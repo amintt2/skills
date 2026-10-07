@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Put a secret where Mailbase reads it — WITHOUT it ever being typed into a
+// Put a secret where your app reads it — WITHOUT it ever being typed into a
 // chat, a command line or a log. You copy the secret, run this, confirm.
 //
 //   node ~/.claude/skills/set-secret/set-secret.mjs TYPESAFE_API_KEY          # Coolify + local
 //   node ~/.claude/skills/set-secret/set-secret.mjs STRIPE_SECRET_KEY --format stripe
 //   node ~/.claude/skills/set-secret/set-secret.mjs SOME_KEY --only local      # or --only coolify
-//   … --app <coolify app uuid>   (default: Mailbase production, mailbase:main)
+//   … --app <coolify app uuid>   (default: $COOLIFY_APP_UUID)
 //   … --repo <path>              (default: the git root of the current directory)
 //
 // What it does, in order:
@@ -40,7 +40,6 @@ function gitRoot(dir) {
     return resolve(dir);
   }
 }
-const DEFAULT_APP = "s13zq7mqf80t31twmo0is7gg"; // mailbase:main
 
 // Known secret shapes. Inferred from the key name when --format is absent.
 const FORMATS = {
@@ -85,7 +84,8 @@ const format = FORMATS[formatName];
 if (!format) die(`unknown --format ${formatName} (known: ${Object.keys(FORMATS).join(", ")})`);
 const only = opt("only");
 if (only && !["local", "coolify"].includes(only)) die("--only must be local or coolify");
-const app = opt("app") || DEFAULT_APP;
+const app = opt("app") || process.env.COOLIFY_APP_UUID;
+if (only !== "local" && !app) die("pass --app <coolify uuid> or set COOLIFY_APP_UUID, or use --only local.");
 const REPO = opt("repo") ? resolve(opt("repo")) : gitRoot(process.cwd());
 
 // ── 1-2. clipboard + validation ─────────────────────────────────────────

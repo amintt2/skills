@@ -29,7 +29,7 @@ Replace `KEY_NAME` with the real variable name (e.g. `TYPESAFE_API_KEY`,
 |---|---|
 | `--only local` / `--only coolify` | only one target (default: both) |
 | `--format <name>` | force the format check: `typesafe`, `aws-access-key-id`, `aws-secret`, `stripe`, `stripe-webhook`, `openrouter`, `generic` (default: inferred from the key name) |
-| `--app <uuid>` | Coolify application (default `s13zq7mqf80t31twmo0is7gg` = Mailbase `mailbase:main`) |
+| `--app <uuid>` | Coolify application (default: `$COOLIFY_APP_UUID`; required for Coolify) |
 | `--repo <path>` | project whose `.env.local` files to update (default: git root of the current dir; worktrees under `.claude/worktrees/*` are included) |
 
 For two secrets (e.g. AWS key id + secret), give two blocks and tell the user to
